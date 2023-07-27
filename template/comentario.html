@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<br>
+<h2>Comentario:</h2>
+<form method="POST" class="form">
+    {% csrf_token %}
+    <div id='com_box' class="form-group">
+    <textarea class="form-control" name='comentario'></textarea>
+    </div>
+<button>
+    Enviar
+</button>
+{% if bandera %}
+
+<br>
+{{ gracias }}
+
+{% endif %}
+
+<a href="{% url 'inicio' %}">
+		Regresar al inicio
+</a>
+
+<style>
+    #com_box {
+        padding: 10px;
+        margin-right: 60%;
+    }
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+
+{% if array >= 15 %}
+
+<div class="container">
+	<div class="jumbotron my-4">
+		<h1>¡Felicidades! Terminaste con el cuestionario. Mira el tablero de posiciones</h1>
+		<a href="{% url 'tablero' %}">Ver Aqui</a>
+	</div>
+</div>
+
+{% else %}
+
+<div class="container">
+	<div class="count">
+		<div id="timer"></div>
+	</div>	
+	<div class="jumbotron my-4">
+		
+		
+		<p>Pregunta {{n_pregunta}} de 15</p>
+		<h3>
+			{{pregunta.texto}}
+		</h3>
+
+		<div class="demo">   
+			<input id = "btnSubmit" type="submit" value="Necesito ayuda"/>
+			<br> <br> 
+		</div>
+
+		<script>
+			
+			sec = {{ sec }},
+			countDiv = document.getElementById("timer"),
+			secpass(),
+			countDown = setInterval(function () {
+				secpass();
+			}, 1000);
+		
+		function secpass() {
+		
+			var min = Math.floor(sec / 60),
+				remSec = sec % 60;
+		
+			if (remSec < 10) {
+				remSec = '0' + remSec;
+			}
+			if (min < 10) {
+				min = '0' + min;
+			}
+			countDiv.innerHTML = min + ":" + remSec;
+			
+			if (sec > 0) {
+				sec = sec - 1;
+			} else {
+				clearInterval(countDown);
+				window.location.href = '/sinTiempo/';
+			}
+			
+			$.ajax(
+				type: "GET",
+				url: '/jugar',
+				data: {
+					"sec": sec,
+				}
+			});
+		}
+
+			$(document).ready(function() {
+				$("#btnSubmit").click(function alert_jqueryconfirm(){
+					bandera = true;
+					$.ajax({
+						type: "GET",
+						url: '/jugar',
+						data: {
+							"bandera": bandera,
+						}
+					});
+					$.alert({
+						title: 'La respuesta es:',
+						content: '{{ correcta }}'	
+					});
+				}); 
+			});
+			var checkForm = function(form) {
+
+				form.myButton.disabled = true;
+				return true;
+			};
+		</script>
+		<form method="POST" class="form" onsubmit="return checkForm(this);">
+			{% csrf_token %}
+			<input type="hidden" name="pregunta_pk" value="{{pregunta.pk}}">
+
+			{% for opciones in pregunta.opciones.all %}
+				<div class="form-check mx-4">
+				<input class="form-check-input" type="radio" name="respuesta_pk" value="{{opciones.pk}}" id="choice-{{forloop.counter}}">
+				<label class="form-check-label" for="choice-{{forloop.counter}}">
+					{{opciones.texto}}
+				</label>
+				</div>
+			{% endfor %}
+			<button name="myButton" type="submit" class="btn btn-success">
+				Comprobar respuesta
+			</button>
+		</form>
+
+	</div>
+
+</div>
+
+<style>
+	.count {
+		position: fixed;
+		padding-left: 33px;
+		padding-top: 22px;
+	}
+</style>
+
+{% endif %}
+
+{% endblock %}

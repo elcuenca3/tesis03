@@ -1,0 +1,23 @@
+{% block contenido %}
+
+<h1>Sistema tutor inteligente</h1>
+<h2>Apoyo en la materia de Algorimos y Resolución de Problemas</h2>
+<p>Durante la prueba se examinarán los contenidos del segundo bimestre de la materia de Algorimos y Resolución de Problemas</p>
+
+
+<p>Ingrese su cédula de identidad o su nombre (Máximo 10 caracteres)</p>
+<p>{{ alerta }}</p>
+<form method="POST" class="form">
+    {% csrf_token %}
+    <input name="nombre_estudiante">
+
+<a href="{% url 'jugar' %}">
+    <button name="myButton" type="submit" class="btn btn-success">
+        Iniciar
+    </button>
+</a>
+
+<p>En caso de encontrar errores envia un correo con tus comentarios a:</p>
+<p>elcuenca3@utpl.edu.ec</p>
+
+{% endblock %}
