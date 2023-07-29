@@ -42,9 +42,6 @@ def inicio(request):
 
 	nombre_usuario = request.POST.get('nombre_estudiante')
 
-# def index(request):
-# 	return render(request, 'inicio.html')
-
 	if request.method =='POST':
 		if nombre_usuario != '' and nombre_usuario is not None:
 			if len(nombre_usuario) > 10:
@@ -155,7 +152,7 @@ def jugar(request):
 		if len(array) <= 15 and getP == True:
 			pregunta = QuizUser.obtener_nuevas_preguntas()
 			if pregunta is None:
-				return render(request, 'play/jugar.html', {'array': 15})
+				return render(request, 'play/jugar.html', {'array': 20})
 
 			getP = False
 		else:
@@ -169,7 +166,7 @@ def jugar(request):
 		correcta = obtenerCorrecta(pregunta.id, ElegirRespuesta)
 	except AttributeError:
 		context = {
-			'array':15
+			'array':20
 		}
 		return render(request, 'play/jugar.html', context)
 	context = {

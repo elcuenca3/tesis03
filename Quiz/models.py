@@ -32,7 +32,7 @@ class Pregunta(models.Model):
 
 class ElegirRespuesta(models.Model):
 
-	MAXIMO_RESPUESTA = 3
+	MAXIMO_RESPUESTA = 4
 	MINIMO_RESPUESTA = 2
 
 	pregunta = models.ForeignKey(Pregunta, related_name='opciones', on_delete=models.CASCADE)

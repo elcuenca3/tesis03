@@ -8,7 +8,7 @@
 
 <div class="container">
 	<div class="jumbotron my-4">
-		<h1>¡Felicidades! Terminaste con el cuestionario. Mira el tablero de posiciones</h1>
+		<h1>Ya haz respondido a todas nuestras preguntas. Mira el tablero de posiciones</h1>
 		<a href="{% url 'tablero' %}">Ver Aqui</a>
 	</div>
 </div>
@@ -61,7 +61,7 @@
 				window.location.href = '/sinTiempo/';
 			}
 			
-			$.ajax(
+			$.ajax({
 				type: "GET",
 				url: '/jugar',
 				data: {
