@@ -1,0 +1,67 @@
+{% extends 'base.html' %} {% load static %} {% block contenido %}
+
+<div class="container py-4">
+  <div class="jumbotron bgbase">
+    <div class="row text">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">
+        <h1>Sistema tutor inteligente</h1>
+        <h2>Apoyo en la materia de Algorimos y Resolución de Problemas</h2>
+        <p>
+          Durante la prueba se examinarán los contenidos del segundo bimestre de
+          la materia de Algorimos y Resolución de Problemas
+        </p>
+
+        <p>Ingrese su cédula de identidad o su nombre (Máximo 10 caracteres)</p>
+        <p>{{ alerta }}</p>
+        <form method="POST" class="form" action="{% url 'tutor' %}">
+          {% csrf_token %}
+          <input
+            class="user"
+            name="nombre_estudiante"
+            placeholder="Ingrese su nombre"
+          />
+          <br />
+          <div class="container py-4">
+          <button
+            name="cuestionario"
+            value="1"
+            type="submit"
+            class="btn btn-success"
+          >
+            Cuestionario Fundamentos de hardware
+          </button>
+          <br />
+          <br />
+          <button
+            name="cuestionario"
+            value="2"
+            type="submit"
+            class="btn btn-success"
+          >
+            Cuestionario Algoritmos y Resolución de Problemas
+          </button>
+          <br />
+          <br />
+          <button
+            name="cuestionario"
+            value="3"
+            type="submit"
+            class="btn btn-success"
+          >
+            Cuestionario Metodología de la Investigación y Técnicas de Estudio
+          </button>
+          <br />
+          <br />
+        </div>
+        </form>
+
+        <p>
+          En caso de encontrar errores envia un correo con tus comentarios a:
+        </p>
+        <p>elcuenca3@utpl.edu.ec</p>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+</div>

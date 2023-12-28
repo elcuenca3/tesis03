@@ -9,11 +9,33 @@ from .sistemafuzzy import obtener_dif_pregunta
 
 import random
 
-# Cambios echos por Erick
-# class Materia (models.Model):
-# 	quizMateria  =models.ForeignKey(verbose_name="Nombre materia",  null=True)
-# 	quizMateria_docente  =models.ForeignKey(verbose_name="Nombre docente",  null=True)
-# 	quizCiclo  =models.TextField(verbose_name='Ip usuario')
+
+class Carrera(models.Model):
+    idCarrera = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nombre 
+
+
+class Materias(models.Model):
+    idMateria = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    ciclo = models.IntegerField(null=False)
+    idCarrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.idMateria} - {self.nombre}"
+
+
+class Cuestionarios(models.Model):
+    idCuestionario = models.AutoField(primary_key=True,unique=True)
+    nombre = models.CharField(max_length=100)
+    idMateria = models.ForeignKey(Materias, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nombre
+
 
 class Pregunta(models.Model):
 
@@ -24,6 +46,7 @@ class Pregunta(models.Model):
 	max_puntaje = models.DecimalField(verbose_name='Maximo Puntaje', default=3, decimal_places=2, max_digits=6)
 	tipo = models.TextField(verbose_name='Tipo de pregunta')
 	unidad = models.IntegerField(verbose_name='Unidad a la que pertenece')
+	cuestionario_id = models.ForeignKey(Cuestionarios,on_delete=models.CASCADE,verbose_name='Cuestionario')
 	# Cambios echos por Erick
 	# materia =models.ForeignKey(Materia, on_delete=models.CASCADE, related_name='nombre de materia', null=False)
 	def __str__(self):
@@ -52,19 +75,19 @@ class QuizUsuario(models.Model):
 		intento = PreguntasRespondidas(pregunta=pregunta, quizUser=self, nombreUser=self)
 		intento.save()
 
-	def getNumP(self):
+	def getNumP(self,id_cuestionario):
 		respondidas = PreguntasRespondidas.objects.filter(quizUser=self).values_list('pregunta__pk', flat=True)
 		return len(respondidas) + 1
 
-	def obtener_nuevas_preguntas(self):
+	def obtener_nuevas_preguntas(self,id_cuestionario):
 		dif = obtener_dif_pregunta()
 		print(dif)
 		respondidas = PreguntasRespondidas.objects.filter(quizUser=self).values_list('pregunta__pk', flat=True)
-		preguntas_restantes = Pregunta.objects.exclude(pk__in=respondidas)
+		preguntas_restantes = Pregunta.objects.exclude(pk__in=respondidas, cuestionario_id=id_cuestionario)
 		if len(respondidas) >= 15:
 			return None
 		try:
-			return random.choice(preguntas_restantes.filter(dificultad=dif))
+			return random.choice(preguntas_restantes.filter(dificultad=dif,cuestionario_id=id_cuestionario))
 		except IndexError:
 			return random.choice(preguntas_restantes)
 

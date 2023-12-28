@@ -1,0 +1,102 @@
+
+
+body {
+  background: #acaaa1;
+  margin-top: auto;
+  margin-bottom: auto;
+  background: -webkit-linear-gradient(
+    to right,
+    #eaeaea,
+    #dbdbdb,
+    #f2f2f2,
+    #ada996
+  );
+  background: linear-gradient(to right, #eaeaea, #dbdbdb, #f2f2f2, #ada996);
+}
+.decore{
+  text-decoration: none;
+}
+#center {
+    display: block; /* Hace que la imagen sea un bloque */
+    margin: 0 auto; /* Centra horizontalmente */
+}
+#impor {
+  color: #ef6943;
+}
+.bgbase{
+    background-color: #343A40;
+    
+}
+.text{
+    color: #dbdbdb;
+}
+#logo {
+  position: absolute;
+  /* Centra horizontalmente */
+  padding-bottom: 0px;
+}
+.espacio{
+  margin-bottom: 100px;
+
+
+
+}
+
+.espaciojuego{
+  padding-top: 130px;
+  padding-bottom: 130px;
+
+
+}
+.espaciomate{
+  padding-top: 50px;
+  padding-bottom: 385px;
+
+
+}
+.espacior{
+  padding-top: 182px;
+  padding-bottom: 181px;
+
+}
+.espacioinicio{
+  padding-top: 49px;
+  padding-bottom: 48px;
+
+}
+.espacio1{
+  padding-top: 200px;
+  padding-bottom: 253px;
+
+}
+.colornav{
+  font-size: medium;
+  color:  #95F6EA;
+}
+.colornav:hover {
+  transform: scale(1.2); /* Ajusta el valor según tus preferencias para el nivel de agrandamiento */
+  transition: transform 0.3s ease;
+  color: #b2f1ff; /* Cambia el color a tu preferencia al pasar el ratón sobre el enlace */
+}
+.colornavsalir{
+
+  font-size: medium;
+  color:  #e4ba48;
+}
+.colornavsalir:hover {
+  transform: scale(1.2); /* Ajusta el valor según tus preferencias para el nivel de agrandamiento */
+  transition: transform 0.3s ease; 
+  color: rgb(228, 71, 71); /* Cambia el color a tu preferencia al pasar el ratón sobre el enlace */
+}
+.user{
+  appearance: none;
+	border: none;
+	outline: none;
+	border-bottom: .2em solid #1ee9c7;
+	background: rgba(#1ecbe9, .2);
+	border-radius: .2em .2em 0 0;
+	padding: .4em;
+	color: #2b2b2b;
+  width: 300px;
+  
+}

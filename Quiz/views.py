@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError, MultipleObjectsReturned
 
 from .models import QuizUsuario, Pregunta, PreguntasRespondidas, ElegirRespuesta
 
-from django.http import Http404
+from django.http import Http404, HttpResponse
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -95,7 +95,7 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-def jugar(request):
+def jugar(request, inter):
 	global array
 	global sec
 	global t_pregunta
@@ -145,12 +145,16 @@ def jugar(request):
 
 		getP = True
 		bandera = False
-
-		return redirect('resultado', pregunta_respondida.pk)
+		if inter==2:
+			return redirect('resultado1', pregunta_respondida.pk)
+		if inter==3:
+			return redirect('resultado2', pregunta_respondida.pk)
+		else:
+			return redirect('resultado', pregunta_respondida.pk)
 
 	else:
 		if len(array) <= 15 and getP == True:
-			pregunta = QuizUser.obtener_nuevas_preguntas()
+			pregunta = QuizUser.obtener_nuevas_preguntas(inter)
 			if pregunta is None:
 				return render(request, 'play/jugar.html', {'array': 20})
 
@@ -184,13 +188,38 @@ def jugar(request):
 
 	return render(request, 'play/jugar.html', context)
 
-def resultado(request, pregunta_respondida_pk):
-	respondida = get_object_or_404(PreguntasRespondidas, pk=pregunta_respondida_pk)
 
-	context = {
-		'respondida':respondida
-	}
-	return render(request, 'play/resultado.html', context)
+def resultado(request, pregunta_respondida_pk):
+    respondida = get_object_or_404(
+        PreguntasRespondidas, pk=pregunta_respondida_pk)
+
+    context = {
+        'respondida': respondida,
+
+
+    }
+    return render(request, 'play/resultado.html', context)
+def resultado1(request, pregunta_respondida_pk):
+    respondida = get_object_or_404(
+        PreguntasRespondidas, pk=pregunta_respondida_pk)
+
+    context = {
+        'respondida': respondida,
+
+
+    }
+    return render(request, 'play/resultado1.html', context)
+def resultado2(request, pregunta_respondida_pk):
+    respondida = get_object_or_404(
+        PreguntasRespondidas, pk=pregunta_respondida_pk)
+
+    context = {
+        'respondida': respondida,
+
+
+    }
+    return render(request, 'play/resultado2.html', context)
+
 
 def sinTiempo(request):
 
@@ -216,6 +245,48 @@ def comentario(request):
 	return render(request, 'comentario.html', context)
 
 def obtenerCorrecta(pregunta_id, respuesta):
-	correcta = respuesta.objects.filter(pregunta=pregunta_id, correcta=True).get()
+    correcta = respuesta.objects.filter(
+        pregunta=pregunta_id, correcta=True).get()
+    return correcta
+def tutor(request):
+    global sec
+    sec = 1800
+    global t_pregunta
+    t_pregunta = 0
+    global ultima
+    ultima = 0
+    global pregunta
+    pregunta = None
+    global getP
+    getP = True
+    global bandera
+    bandera = False
+    global array
+    array = []
+    global nombre_usuario
+    nombre_usuario = request.POST.get('nombre_estudiante')
+    cuestionario_seleccionado = request.POST.get('cuestionario')
+    if request.method =='POST':
+        if nombre_usuario != '' and nombre_usuario is not None:
+            if len(nombre_usuario) > 10:
+                context = {
+					'alerta': 'El nombre ingresado tiene más de 10 caracteres.'
+				}
+                return render(request, 'inicio.html', context)
+            try:
+                QuizUsuario.objects.get_or_create(usuario=get_client_ip(request), nombre=nombre_usuario)
+            except:
+                context = {
+					'alerta':'Ingrese otro nombre de usuario'
+				}
+        # Redireccionar a las vistas según el cuestionario seleccionado
+        if cuestionario_seleccionado == '1':
+            return redirect('jugar', inter=1)
+        elif cuestionario_seleccionado == '2':
+            return redirect('jugar', inter=2)
+        elif cuestionario_seleccionado == '3':
+            return redirect('jugar', inter=3)
+        else:
+            return HttpResponse("Cuestionario no válido.")
 
-	return correcta
+    return render(request, 'tutor.html')
